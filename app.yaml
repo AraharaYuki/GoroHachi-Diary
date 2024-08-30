@@ -1,0 +1,17 @@
+runtime: nodejs22
+
+entrypoint: node backend/server.js
+
+handlers:
+  - url: /static
+    static_dir: static
+
+  - url: /.*
+    script: auto
+
+env_variables:
+  GCLOUD_PROJECT_ID: gorohachi-app
+  GCLOUD_BUCKET_NAME: gorohachi-app-bucket
+  GCLOUD_KEY_FILE: backend/config/gorohachi-app-key.json
+  MONGODB_URI: mongodb+srv://Asupisu2580:Arayuki2002@cluster0.ukra3zi.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0
+  SECRET_KEY: Arayuki2002

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+    <script>
+        window.onload = function () {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                alert('ここは主しか閲覧できないとこだお');
+                window.location.href = 'index.html';
+            }
+        };
+    </script>
+</head>
+
+<body>
+    <h1>新しい投稿の作成</h1>
+    <form id="postForm">
+        <label for="title">タイトル: </label>
+        <input type="text" id="title" name="title"><br>
+        <label for="summary">要約: </label>
+        <input type="text" id="summary" name="summary"><br>
+        <label for="content">内容: </label>
+        <textarea id="content" name="content"></textarea><br>
+        <label for="image">画像: </label>
+        <input type="file" id="image" name="image"><br>
+        <button type="button" onclick="submitPost()">Submit</button>
+    </form>
+
+    <script>
+        // JWTデコード関数
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                return null;
+            }
+        }
+
+        // トークンの有効期限を確認する関数
+        function checkTokenExpiration() {
+            const token = localStorage.getItem('adminToken');
+            if (token) {
+                const decodedToken = parseJwt(token);
+                const currentTime = Math.floor(Date.now() / 1000); // 現在のUNIX時間 (秒)
+
+                if (decodedToken && decodedToken.exp < currentTime) {
+                    alert('セッションが切れました。再ログインしてください。');
+                    localStorage.removeItem('adminToken');
+                    window.location.href = '/admin_login.html'; // ログインページにリダイレクト
+                }
+            } else {
+                window.location.href = '/admin_login.html'; // トークンがない場合もログインページにリダイレクト
+            }
+        }
+
+        // ページロード時にトークンを確認
+        window.onload = function () {
+            checkTokenExpiration();
+        };
+
+        // 投稿処理
+        async function submitPost() {
+            const form = document.getElementById('postForm');
+            const formData = new FormData(form);
+            const token = localStorage.getItem('adminToken');
+
+            console.log('Token:', token);  // ここでトークンを確認
+
+            try {
+                const response = await fetch('/api/posts', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('投稿しました');
+                    window.location.href = 'blog.html';
+                } else if (response.status === 401) {
+                    alert('セッションが切れました。再ログインしてください。');
+                    localStorage.removeItem('adminToken');
+                    window.location.href = '/admin_login.html'; // ログインページにリダイレクト
+                } else {
+                    alert('投稿に失敗しました');
+                    console.error('投稿エラー:', response);  // 失敗した場合、エラーログを出力
+                }
+            } catch (error) {
+                console.error('エラーが発生しました:', error);
+                alert('エラーが発生しました。再試行してください。');
+            }
+        }
+    </script>
+
+</body>
+
+</html>

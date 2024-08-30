@@ -1,0 +1,108 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Shippori Mincho B1', system-ui;
+    font-weight: 400;
+    font-style: normal;
+    background: transparent url('img/空と月.jpeg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.header {
+    width: 100%;
+    background-color: rgba(107, 96, 137, 0.76);
+    opacity: 0.76;
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    /* 固定位置 */
+    top: 0;
+    /* 上部に配置 */
+    left: 0;
+    /* 左端に配置 */
+    width: 100%;
+    /* ヘッダーを画面幅いっぱいに */
+    z-index: 1000;
+    /* 他の要素の上に表示するために高めの値に */
+    background-color: #6B6089;
+    /* ヘッダーの背景色 */
+    padding: 10px 0;
+    /* 上下に少しスペースを追加 */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    /* 少しの影で視覚的に浮かせる */
+}
+
+.header h1 {
+    font-family: "Matemasie", system-ui;
+    opacity: 1;
+    font-weight: 400;
+    font-style: normal;
+    color: #FFFAF0;
+    font-size: 61px;
+    margin: 0;
+}
+
+.main-content {
+    margin-top: 97px;
+    padding: 50px;
+    text-align: center;
+}
+
+.intro-text {
+    font-size: 29px;
+    color: #FFFAF0;
+}
+
+.quiz-container {
+    margin: 40px auto;
+    position: relative;
+}
+
+.quiz-image {
+    max-width: 50%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.hint-text {
+    font-size: 20px;
+    color: #FFFAF0;
+    margin: 20px 0;
+}
+
+.answer-form {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.answer-form input {
+    width: 300px;
+    padding: 10px;
+    margin: 10px;
+    font-size: 24px;
+    border: 2px solid #6D76A2;
+    border-radius: 5px;
+}
+
+.submit-btn {
+    background-color: #6D76A2;
+    color: #FFFAF0;
+    padding: 15px 50px;
+    font-size: 24px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.submit-btn:hover {
+    background-color: #5c6589;
+}
+
+footer {
+    margin-top: 50px;
+    font-size: 24px;
+    color: #6D76A2;
+    text-align: center;
+    padding: 20px;
+}

@@ -1,25 +1,19 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-
 const router = express.Router();
 
-router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+// 管理者ログイン用のパスワード
+const adminPassword = 'Appy0515';
 
-    if (!user) {
+// 管理者ログイン
+router.post('/admin-login', async (req, res) => {
+    const { password } = req.body;
+
+    if (password !== adminPassword) {
         return res.status(401).send('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-        return res.status(401).send('Invalid credentials');
-    }
-
-    const token = jwt.sign({ userId: user._id }, 'SECRET_KEY', { expiresIn: '1h' });
+    const token = jwt.sign({ role: 'admin' }, process.env.SECRET_KEY, { expiresIn: '1h' });
     res.send({ token });
 });
 

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投稿詳細</title>
+    <script>
+        window.onload = function () {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Unauthorized access. Please complete the quiz first.');
+                window.location.href = 'index.html';
+            } else {
+                fetchPost(token);
+                fetchComments();
+            }
+        };
+
+        async function fetchPost(token) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            const response = await fetch(`/api/posts/${postId}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+            const post = await response.json();
+            document.getElementById('post-title').innerText = post.title;
+            document.getElementById('post-content').innerHTML = post.content;
+            if (post.image) {
+                document.getElementById('post-image').src = post.image;
+            }
+        }
+
+        async function fetchComments() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            const response = await fetch(`/api/comments/${postId}`);
+            const comments = await response.json();
+            const commentsContainer = document.getElementById('comments-container');
+            commentsContainer.innerHTML = '';
+            comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.classList.add('comment');
+                commentElement.innerHTML = `
+                    <p><strong>${comment.author}:</strong> ${comment.content}</p>
+                `;
+                commentsContainer.appendChild(commentElement);
+            });
+        }
+
+        async function submitComment() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            const author = document.getElementById('comment-author').value;
+            const content = document.getElementById('comment-content').value;
+
+            const response = await fetch('/api/comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postId, author, content })
+            });
+
+            if (response.ok) {
+                fetchComments();
+                document.getElementById('comment-author').value = '';
+                document.getElementById('comment-content').value = '';
+            } else {
+                alert('Failed to submit comment');
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <img id="post-image" src="" alt="Post Image" style="max-width: 30%; height: auto;">
+    <h1 id="post-title"></h1>
+    <div id="post-content"></div>
+
+    <div id="comments-section">
+        <h2>コメント</h2>
+        <div id="comments-container"></div>
+        <div>
+            <input type="text" id="comment-author" placeholder="Your name">
+            <textarea id="comment-content" placeholder="Your comment"></textarea>
+            <button onclick="submitComment()">投稿する</button>
+        </div>
+    </div>
+</body>
+
+</html>
