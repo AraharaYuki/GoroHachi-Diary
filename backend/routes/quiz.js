@@ -3,14 +3,17 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 const correctAnswers = {
-    answerA: "にこ",
-    answerB: "さぶろう",
-    answerC: "ななこ",
-    answerD: "ごろう"
+    answerA: process.env.ANSWER_A,
+    answerB: process.env.ANSWER_B,
+    answerC: process.env.ANSWER_C,
+    answerD: process.env.ANSWER_D,
 };
 
 router.post('/check-answers', (req, res) => {
     const { answerA, answerB, answerC, answerD } = req.body;
+
+    console.log('Received answers:', answerA, answerB, answerC, answerD);
+    console.log('Correct answers:', correctAnswers.answerA, correctAnswers.answerB, correctAnswers.answerC, correctAnswers.answerD);
 
     if (
         answerA === correctAnswers.answerA &&

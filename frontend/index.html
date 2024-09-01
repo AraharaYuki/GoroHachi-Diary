@@ -47,20 +47,27 @@
             const answerC = document.getElementById('answerC').value;
             const answerD = document.getElementById('answerD').value;
 
-            const response = await fetch('/api/quiz/check-answers', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ answerA, answerB, answerC, answerD }),
-            });
+            try {
+                const response = await fetch('/api/quiz/check-answers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ answerA, answerB, answerC, answerD }),
+                });
 
-            const result = await response.json();
-            if (result.success) {
-                localStorage.setItem('token', result.token);
-                window.location.href = 'blog.html';
-            } else {
-                alert('残念、違うお。まあ、分からないよな()');
+                const result = await response.json();
+                console.log('APIレスポンス:', result);  // ここでレスポンスを確認
+
+                if (result.success) {
+                    localStorage.setItem('token', result.token);
+                    window.location.href = 'blog.html';
+                } else {
+                    alert('残念、違うよ。まぁ、分からないよね');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('何かがうまくいきませんでした。');
             }
         }
     </script>

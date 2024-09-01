@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: './backend/.env' });
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -16,6 +16,13 @@ console.log('SECRET_KEY:', process.env.SECRET_KEY);
 console.log('GCLOUD_PROJECT_ID:', process.env.GCLOUD_PROJECT_ID);
 console.log('GCLOUD_BUCKET_NAME:', process.env.GCLOUD_BUCKET_NAME);
 console.log('GCLOUD_KEY_FILE:', process.env.GCLOUD_KEY_FILE);
+//console.log('Received request body:', req.body);
+console.log('Environment variables:', process.env.ANSWER_A, process.env.ANSWER_B, process.env.ANSWER_C, process.env.ANSWER_D);
+//console.log('Received answers:', answerA, answerB, answerC, answerD);
+console.log('ANSWER_A:', process.env.ANSWER_A);
+console.log('ANSWER_B:', process.env.ANSWER_B);
+console.log('ANSWER_C:', process.env.ANSWER_C);
+console.log('ANSWER_D:', process.env.ANSWER_D);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
